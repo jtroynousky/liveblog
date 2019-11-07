@@ -1076,7 +1076,7 @@ if ( ! class_exists( 'WPCOM_Liveblog' ) ) :
 
 						// Style
 						'feed_title'                  => __( '', 'liveblog' ),
-						'display_top_pagination'      => false,
+						'display_top_pagination'      => true,
 
 						/**
 						 * Filters the Author list debounce time, defaults to 500ms.
