@@ -7,8 +7,9 @@
 	$share_link     = $this->get( 'share_link' );
 	$update_time    = $this->get( 'update_time' );
 	$share_link_amp = $this->get( 'share_link_amp' );
+	$headline       = $this->get( 'headline' );
+	$subtitle       = $this->get( 'subtitle' );
 ?>
-
 <div class="liveblog-entry" id="post<?php echo esc_attr( $update_time ); ?>"
 	data-sort-time="<?php echo esc_attr( $entry_time ); ?>">
 
@@ -20,37 +21,54 @@
 	</aside>
 
 	<div class="liveblog-entry-main">
-		<header class="liveblog-meta-authors">
+		<header class="liveblog-header">
+			<?php if ( $headline || $subtitle) : ?>
+			<div class="liveblog-entry-heading">
+				<?php if ($headline) : ?>
+				<h2 class="liveblog-entry-headline">
+                  <?php echo esc_html( $headline) ?>
+                </h2>
+				<?php endif; ?>
+				<?php if ($subtitle) : ?>
+				<h3 class="liveblog-entry-subtitle">
+                  <?php echo esc_html( $subtitle) ?>
+                </h3>
+				<?php endif; ?>
+			</div>
+			<?php endif; ?>
+			<div class="liveblog-meta-authors">
+				<?php if ( is_array( $this->get( 'authors' ) ) ) : ?>
 
-			<?php if ( is_array( $this->get( 'authors' ) ) ) : ?>
+					<?php foreach ( $this->get( 'authors' ) as $author ) : ?>
 
-				<?php foreach ( $this->get( 'authors' ) as $author ) : ?>
+						<?php
+						$this->load_part(
+							'author',
+							array(
+								'author' => $author,
+							)
+						);
+						?>
+
+					<?php endforeach ?>
+
+
+					<?php else : ?>
 
 					<?php
 					$this->load_part(
 						'author',
 						array(
-							'author' => $author,
+							'author' => $authors,
 						)
 					);
 					?>
 
-				<?php endforeach ?>
-
-
-				<?php else : ?>
-
-				<?php
-				$this->load_part(
-					'author',
-					array(
-						'author' => $authors,
-					)
-				);
-				?>
-
-			<?php endif; ?>
+				<?php endif; ?>
+			</div>
 		</header>
+
+	
 
 		<div class="liveblog-entry-content">
 			<?php echo wp_kses_post( $this->get( 'content' ) ); ?>
