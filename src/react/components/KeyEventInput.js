@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 
 class KeyEventInput extends React.Component {
   constructor(props) {
-      console.log(props);
     super(props);
     this.componentDidUpdate = (nextProps) => {
       if (nextProps && nextProps.lastUpdate !== this.props.lastUpdate) {
