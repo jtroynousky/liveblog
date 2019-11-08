@@ -173,6 +173,15 @@ class WPCOM_Liveblog_Entry {
 			return $comment;
 		}
 
+		// Process key event checkbox
+		if ( class_exists('\WPCOM_Liveblog_Entry_Key_Events') && isset( $args['key_event'] ) ) {
+			if($args['key_event']){
+				add_comment_meta( $comment->comment_ID, \WPCOM_Liveblog_Entry_Key_Events::META_KEY, \WPCOM_Liveblog_Entry_Key_Events::META_VALUE );
+			} else {
+				delete_comment_meta( $comment->comment_ID, \WPCOM_Liveblog_Entry_Key_Events::META_KEY, \WPCOM_Liveblog_Entry_Key_Events::META_VALUE );
+			}
+		}
+
 		if ( isset( $args['contributor_ids'] ) ) {
 			self::add_contributors( $comment->comment_ID, $args['contributor_ids'] );
 		}

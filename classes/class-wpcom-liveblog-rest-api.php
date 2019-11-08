@@ -385,6 +385,7 @@ class WPCOM_Liveblog_Rest_Api {
 			'entry_id'        => self::get_json_param( 'entry_id', $json ),
 			'author_id'       => self::get_json_param( 'author_id', $json ),
 			'contributor_ids' => self::get_json_param( 'contributor_ids', $json ),
+			'key_event'       => self::get_json_param( 'key_event', $json )
 		);
 
 		self::set_liveblog_vars( $args['post_id'] );

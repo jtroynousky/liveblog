@@ -24,6 +24,7 @@ import HTMLInput from '../components/HTMLInput';
 import Editor, { decorators, convertFromHTML, convertToHTML } from '../Editor/index';
 
 import { getImageSize } from '../Editor/utils';
+import KeyEventInput from '../components/KeyEventInput';
 
 class EditorContainer extends Component {
   constructor(props) {
@@ -54,11 +55,17 @@ class EditorContainer extends Component {
       mode: 'editor',
       readOnly: false,
       rawText: props.entry ? props.entry.content : '',
+      keyEvent: props.entry ? props.entry.key_event : false,
+      lastUpdate: new Date().getTime(),
     };
 
     this.onChange = editorState => this.setState({
       editorState,
       rawText: html(convertToHTML(editorState.getCurrentContent())),
+    });
+
+    this.clearKeyEvent = () => this.setState({
+      keyEvent: false,
     });
 
     this.getUsers = debounce(this.getUsers.bind(this), props.config.author_list_debounce_time);
@@ -97,6 +104,7 @@ class EditorContainer extends Component {
     const author = authorIds.length > 0 ? authorIds[0] : false;
     const contributors = authorIds.length > 1 ? authorIds.slice(1, authorIds.length) : false;
     const htmlregex = /<(img|picture|video|audio|canvas|svg|iframe|embed) ?.*>/;
+    const keyEvent = this.state.keyEvent;
 
     // We don't want an editor publishing empty entries
     // So we must check if there is any text within the editor
@@ -114,6 +122,7 @@ class EditorContainer extends Component {
         content,
         author,
         contributors,
+        keyEvent,
       });
       entryEditClose(entry.id);
       return;
@@ -123,6 +132,7 @@ class EditorContainer extends Component {
       content,
       author,
       contributors,
+      keyEvent,
     });
 
     const newEditorState = EditorState.push(
@@ -132,11 +142,20 @@ class EditorContainer extends Component {
 
     this.onChange(newEditorState);
     this.setState({ readOnly: false });
+    this.setState({
+      lastUpdate: new Date().getTime(),
+    });
   }
 
   onSelectAuthorChange(value) {
     this.setState({
       authors: value,
+    });
+  }
+
+  onkeyEventChange(value) {
+    this.setState({
+      keyEvent: value,
     });
   }
 
@@ -236,6 +255,8 @@ class EditorContainer extends Component {
       mode,
       authors,
       readOnly,
+      keyEvent,
+      lastUpdate
     } = this.state;
 
     const { isEditing, config } = this.props;
@@ -298,6 +319,12 @@ class EditorContainer extends Component {
             width="100%"
           />
         }
+        <KeyEventInput
+          onChange={this.onkeyEventChange.bind(this)}
+          checked={keyEvent}
+          lastUpdate={lastUpdate}
+          clearKeyEvent={this.clearKeyEvent.bind(this)}
+        />
         <h2 className="liveblog-editor-subTitle">Authors:</h2>
         <Async
           multi={true}
