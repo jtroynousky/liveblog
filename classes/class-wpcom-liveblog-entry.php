@@ -219,6 +219,15 @@ class WPCOM_Liveblog_Entry {
 
 		$args = apply_filters( 'liveblog_before_update_entry', $args );
 
+		// Process key event checkbox
+		if ( class_exists('\WPCOM_Liveblog_Entry_Key_Events') && isset( $args['key_event'] ) ) {
+			if($args['key_event']){
+				add_comment_meta( $args['entry_id'], \WPCOM_Liveblog_Entry_Key_Events::META_KEY, \WPCOM_Liveblog_Entry_Key_Events::META_VALUE );
+			} else {
+				delete_comment_meta( $args['entry_id'], \WPCOM_Liveblog_Entry_Key_Events::META_KEY, \WPCOM_Liveblog_Entry_Key_Events::META_VALUE );
+			}
+		}
+
 		$comment = self::insert_comment( $args );
 		if ( is_wp_error( $comment ) ) {
 			return $comment;
