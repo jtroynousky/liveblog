@@ -47,7 +47,6 @@ class EditorContainer extends Component {
       initialEditorState = EditorState.createEmpty(decorators);
       initialAuthors = [props.config.current_user];
     }
-
     this.state = {
       editorState: initialEditorState,
       suggestions: [],

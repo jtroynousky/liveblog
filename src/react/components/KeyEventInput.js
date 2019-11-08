@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 
 class KeyEventInput extends React.Component {
   constructor(props) {
+      console.log(props);
     super(props);
     this.componentDidUpdate = (nextProps) => {
       if (nextProps && nextProps.lastUpdate !== this.props.lastUpdate) {
@@ -28,7 +29,7 @@ class KeyEventInput extends React.Component {
             name="key-event"
             className="liveblog-input liveblog-input-key-event"
             onChange={evt => this.updateInputValue(evt)}
-            value={this.props.checked}
+            checked={this.props.checked}
           />
         </div>
       </div>
