@@ -2798,7 +2798,10 @@ function createEntry(entry, config) {
       post_id: config.post_id,
       content: entry.content,
       author_id: entry.author,
-      contributor_ids: entry.contributors
+      contributor_ids: entry.contributors,
+      headline: entry.headline,
+      subtitle: entry.subtitle
+
     },
     headers: {
       'Content-Type': 'application/json',
@@ -2823,7 +2826,9 @@ function updateEntry(entry, config) {
       entry_id: entry.id,
       content: entry.content,
       author_id: entry.author,
-      contributor_ids: entry.contributors
+      contributor_ids: entry.contributors,
+      headline: entry.headline,
+      subtitle: entry.subtitle
     },
     headers: {
       'Content-Type': 'application/json',
