@@ -52442,20 +52442,38 @@ var EntryContainer = function (_Component) {
             onConfirmDelete: this.delete,
             onCancel: this.togglePopup.bind(this)
           }) : null,
-          entry.authors && entry.authors.length > 0 && _react2.default.createElement(
+          _react2.default.createElement(
             'header',
-            { className: 'liveblog-meta-authors' },
-            entry.authors.map(function (author) {
-              return _react2.default.createElement(
-                'div',
-                { className: 'liveblog-meta-author', key: author.id },
-                author.avatar && _react2.default.createElement('div', {
-                  className: 'liveblog-meta-author-avatar',
-                  dangerouslySetInnerHTML: { __html: author.avatar } }),
-                _react2.default.createElement('span', { className: 'liveblog-meta-author-name',
-                  dangerouslySetInnerHTML: { __html: author.name } })
-              );
-            })
+            { className: 'liveblog-header' },
+            (entry.headline || entry.subtitle) && _react2.default.createElement(
+              'div',
+              { className: 'liveblog-entry-heading' },
+              entry.headline && _react2.default.createElement(
+                'h2',
+                { className: 'liveblog-entry-headline' },
+                entry.headline
+              ),
+              entry.subtitle && _react2.default.createElement(
+                'h3',
+                { className: 'liveblog-entry-subtitle' },
+                entry.subtitle
+              )
+            ),
+            entry.authors && entry.authors.length > 0 && _react2.default.createElement(
+              'div',
+              { className: 'liveblog-meta-authors' },
+              entry.authors.map(function (author) {
+                return _react2.default.createElement(
+                  'div',
+                  { className: 'liveblog-meta-author', key: author.id },
+                  author.avatar && _react2.default.createElement('div', {
+                    className: 'liveblog-meta-author-avatar',
+                    dangerouslySetInnerHTML: { __html: author.avatar } }),
+                  _react2.default.createElement('span', { className: 'liveblog-meta-author-name',
+                    dangerouslySetInnerHTML: { __html: author.name } })
+                );
+              })
+            )
           ),
           this.isEditing() ? _react2.default.createElement(
             'div',

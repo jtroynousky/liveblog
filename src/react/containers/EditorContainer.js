@@ -56,7 +56,7 @@ class EditorContainer extends Component {
       mode: 'editor',
       readOnly: false,
       headline: props.entry ? props.entry.headline : '',
-      subtitle: props.entry ? props.entry.suntitle : '',
+      subtitle: props.entry ? props.entry.subtitle : '',
       rawText: props.entry ? props.entry.content : '',
       lastUpdate: new Date().getTime(),
     };
@@ -70,9 +70,9 @@ class EditorContainer extends Component {
       headline: '',
     });
 
-    this.clearSubtitle = () => this.setState({
+    this.clearSubtitle = () => {console.log('here in clearSubtitle'); this.setState({
       subtitle: '',
-    });
+    })};
 
     this.getUsers = debounce(this.getUsers.bind(this), props.config.author_list_debounce_time);
   }
@@ -288,7 +288,7 @@ class EditorContainer extends Component {
         />
         <PostSubtitle
           onChange={this.onSubtitleChange.bind(this)}
-          headline={subtitle}
+          subtitle={subtitle}
           lastUpdate={lastUpdate}
           clearSubtitle={this.clearSubtitle.bind(this)}
         />

@@ -77,7 +77,7 @@ class EntryContainer extends Component {
 
   render() {
     const { entry, config } = this.props;
-
+    
     return (
       <article
         id={`id_${entry.id}`}
@@ -99,24 +99,40 @@ class EntryContainer extends Component {
             />
             : null
           }
-          {
-            (entry.authors && entry.authors.length > 0) &&
-            <header className="liveblog-meta-authors">
-              {
-                entry.authors.map(author => (
-                  <div className="liveblog-meta-author" key={author.id}>
-                    { author.avatar &&
-                      <div
-                        className="liveblog-meta-author-avatar"
-                        dangerouslySetInnerHTML={{ __html: author.avatar }} />
-                    }
-                    <span className="liveblog-meta-author-name"
-                      dangerouslySetInnerHTML={{ __html: author.name }} />
-                  </div>
-                ))
+          <header className="liveblog-header">
+            { (entry.headline || entry.subtitle) &&
+              <div className="liveblog-entry-heading">
+              { entry.headline &&
+                <h2 className="liveblog-entry-headline">
+                  {entry.headline}
+                </h2>
               }
-            </header>
-          }
+              { entry.subtitle &&
+                <h3 className="liveblog-entry-subtitle">
+                  {entry.subtitle}
+                </h3>
+              }
+              </div>
+            }
+            {
+              (entry.authors && entry.authors.length > 0) &&
+              <div className="liveblog-meta-authors">
+                {
+                  entry.authors.map(author => (
+                    <div className="liveblog-meta-author" key={author.id}>
+                      { author.avatar &&
+                        <div
+                          className="liveblog-meta-author-avatar"
+                          dangerouslySetInnerHTML={{ __html: author.avatar }} />
+                      }
+                      <span className="liveblog-meta-author-name"
+                        dangerouslySetInnerHTML={{ __html: author.name }} />
+                    </div>
+                  ))
+                }
+              </div>
+            }
+          </header>        
           {
             this.isEditing()
               ? (
