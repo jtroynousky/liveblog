@@ -1075,6 +1075,8 @@ if ( ! class_exists( 'WPCOM_Liveblog' ) ) :
 						'class_key'                    => __( 'type-key', 'liveblog' ),
 
 						// Style
+						'hide_author_bylines'          => false,
+						'hide_author_input'            => false,
 						'feed_title'                  => __( '', 'liveblog' ),
 						'display_top_pagination'      => true,
 
