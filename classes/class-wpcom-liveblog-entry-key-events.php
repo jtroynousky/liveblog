@@ -68,6 +68,9 @@ class WPCOM_Liveblog_Entry_Key_Events {
 		// Hook into the liveblog_admin_settings_update action
 		// to save the key event template.
 		add_action( 'liveblog_admin_settings_update', array( __CLASS__, 'save_template_option' ), 10, 3 );
+
+		// Hook into entry json to add key event meta
+		add_filter( 'liveblog_entry_for_json', array( __CLASS__, 'add_key_event_json'), 10, 2 );
 	}
 
 	/**
@@ -98,6 +101,20 @@ class WPCOM_Liveblog_Entry_Key_Events {
 		$commands[] = 'key';
 
 		return $commands;
+	}
+
+	/**
+	 * Adds the key event meta to entry json
+	 *
+	 * @param $json
+	 * @param $entry
+	 * @return mixed
+	 */
+	public static function add_key_event_json( $json, $entry ) {
+
+		$json['key_event'] = self::is_key_event($json['id']);
+
+		return $json;
 	}
 
 	/**

@@ -20,10 +20,13 @@ import { getAuthors, getHashtags, uploadImage } from '../services/api';
 import PreviewContainer from './PreviewContainer';
 import AuthorSelectOption from '../components/AuthorSelectOption';
 import HTMLInput from '../components/HTMLInput';
+import PostHeadline from '../components/PostHeadline';
+import PostSubtitle from '../components/PostSubtitle';
 
 import Editor, { decorators, convertFromHTML, convertToHTML } from '../Editor/index';
 
 import { getImageSize } from '../Editor/utils';
+import KeyEventInput from '../components/KeyEventInput';
 
 class EditorContainer extends Component {
   constructor(props) {
@@ -46,20 +49,35 @@ class EditorContainer extends Component {
       initialEditorState = EditorState.createEmpty(decorators);
       initialAuthors = [props.config.current_user];
     }
-
     this.state = {
       editorState: initialEditorState,
       suggestions: [],
       authors: initialAuthors,
       mode: 'editor',
       readOnly: false,
+      headline: props.entry ? props.entry.headline : '',
+      subtitle: props.entry ? props.entry.subtitle : '',
       rawText: props.entry ? props.entry.content : '',
+      keyEvent: props.entry ? props.entry.key_event : false,
+      lastUpdate: new Date().getTime(),
     };
 
     this.onChange = editorState => this.setState({
       editorState,
       rawText: html(convertToHTML(editorState.getCurrentContent())),
     });
+
+    this.clearKeyEvent = () => this.setState({
+      keyEvent: false,
+    });
+
+    this.clearHeadline = () => this.setState({
+      headline: '',
+    });
+
+    this.clearSubtitle = () => {console.log('here in clearSubtitle'); this.setState({
+      subtitle: '',
+    })};
 
     this.getUsers = debounce(this.getUsers.bind(this), props.config.author_list_debounce_time);
   }
@@ -97,6 +115,9 @@ class EditorContainer extends Component {
     const author = authorIds.length > 0 ? authorIds[0] : false;
     const contributors = authorIds.length > 1 ? authorIds.slice(1, authorIds.length) : false;
     const htmlregex = /<(img|picture|video|audio|canvas|svg|iframe|embed) ?.*>/;
+    const keyEvent = this.state.keyEvent;
+    const headline = this.state.headline;
+    const subtitle = this.state.subtitle;
 
     // We don't want an editor publishing empty entries
     // So we must check if there is any text within the editor
@@ -114,6 +135,9 @@ class EditorContainer extends Component {
         content,
         author,
         contributors,
+        keyEvent,
+        headline,
+        subtitle,
       });
       entryEditClose(entry.id);
       return;
@@ -123,6 +147,9 @@ class EditorContainer extends Component {
       content,
       author,
       contributors,
+      keyEvent,
+      headline,
+      subtitle,
     });
 
     const newEditorState = EditorState.push(
@@ -132,11 +159,32 @@ class EditorContainer extends Component {
 
     this.onChange(newEditorState);
     this.setState({ readOnly: false });
+    this.setState({
+      lastUpdate: new Date().getTime(),
+    });
   }
 
   onSelectAuthorChange(value) {
     this.setState({
       authors: value,
+    });
+  }
+
+  onkeyEventChange(value) {
+    this.setState({
+      keyEvent: value,
+    });
+  }
+  
+  onHeadlineChange(value) {
+    this.setState({
+      headline: value,
+    });
+  }
+
+  onSubtitleChange(value) {
+    this.setState({
+      subtitle: value,
     });
   }
 
@@ -229,6 +277,25 @@ class EditorContainer extends Component {
     });
   }
 
+  authorsBlock(authors) {
+    return (
+      <React.Fragment>
+        <h2 className="liveblog-editor-subTitle">Authors:</h2>
+        <Async
+          multi={true}
+          value={authors}
+          valueKey="key"
+          labelKey="name"
+          onChange={this.onSelectAuthorChange.bind(this)}
+          optionComponent={AuthorSelectOption}
+          loadOptions={this.getUsers}
+          clearable={false}
+          cache={false}
+        />
+      </React.Fragment>
+    );
+  }
+
   render() {
     const {
       editorState,
@@ -236,6 +303,10 @@ class EditorContainer extends Component {
       mode,
       authors,
       readOnly,
+      keyEvent,
+      headline,
+      subtitle,
+      lastUpdate
     } = this.state;
 
     const { isEditing, config } = this.props;
@@ -243,23 +314,32 @@ class EditorContainer extends Component {
     return (
       <div className="liveblog-editor-container">
         {!isEditing && <h1 className="liveblog-editor-title">Add New Entry</h1>}
+        <PostHeadline
+          onChange={this.onHeadlineChange.bind(this)}
+          headline={headline}
+          lastUpdate={lastUpdate}
+          clearHeadline={this.clearHeadline.bind(this)}
+        />
+        <PostSubtitle
+          onChange={this.onSubtitleChange.bind(this)}
+          subtitle={subtitle}
+          lastUpdate={lastUpdate}
+          clearSubtitle={this.clearSubtitle.bind(this)}
+        />
         <div className="liveblog-editor-tabs">
           <button
             className={`liveblog-editor-tab ${mode === 'editor' ? 'is-active' : ''}`}
-            onClick={() => this.setState({ mode: 'editor' })}
-          >
+            onClick={(e) => { e.preventDefault(); this.setState({ mode: 'editor' }); } }          >
             Visual
           </button>
           <button
             className={`liveblog-editor-tab ${mode === 'raw' ? 'is-active' : ''}`}
-            onClick={() => this.setState({ mode: 'raw' })}
-          >
+            onClick={(e) => { e.preventDefault(); this.setState({ mode: 'raw' }); } }          >
               Text
           </button>
           <button
             className={`liveblog-editor-tab ${mode === 'preview' ? 'is-active' : ''}`}
-            onClick={() => this.setState({ mode: 'preview' })}
-          >
+            onClick={(e) => { e.preventDefault(); this.setState({ mode: 'preview' }); } }          >
               Preview
           </button>
         </div>
@@ -298,6 +378,12 @@ class EditorContainer extends Component {
             width="100%"
           />
         }
+        <KeyEventInput
+          onChange={this.onkeyEventChange.bind(this)}
+          checked={keyEvent}
+          lastUpdate={lastUpdate}
+          clearKeyEvent={this.clearKeyEvent.bind(this)}
+        />
         <h2 className="liveblog-editor-subTitle">Authors:</h2>
         <Async
           multi={true}
@@ -310,6 +396,9 @@ class EditorContainer extends Component {
           clearable={false}
           cache={false}
         />
+
+        {!config.hide_author_input && this.authorsBlock(authors)}
+
         <button className="liveblog-btn liveblog-publish-btn" onClick={this.publish.bind(this)}>
           {isEditing ? 'Publish Update' : 'Publish New Entry'}
         </button>
