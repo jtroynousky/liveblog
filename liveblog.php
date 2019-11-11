@@ -1074,6 +1074,10 @@ if ( ! class_exists( 'WPCOM_Liveblog' ) ) :
 						'class_alert'                  => __( 'type-alert', 'liveblog' ),
 						'class_key'                    => __( 'type-key', 'liveblog' ),
 
+						// Style
+						'feed_title'                  => __( '', 'liveblog' ),
+						'display_top_pagination'      => true,
+
 						/**
 						 * Filters the Author list debounce time, defaults to 500ms.
 						 *
