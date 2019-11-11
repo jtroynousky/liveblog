@@ -48,6 +48,12 @@ export default contentState =>
           nestEnd: '</ol>',
         };
       }
+      if (block.type === 'blockquote') {
+        return {
+          start: '<blockquote>',
+          end: '</blockquote>',
+        }
+      }
       if (block.type === 'unstyled') {
         return <p />;
       }

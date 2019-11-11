@@ -85,7 +85,7 @@ class EntryContainer extends Component {
         className={`liveblog-entry ${entry.key_event ? 'is-key-event' : ''} ${entry.css_classes}`}
       >
         <aside className="liveblog-entry-aside">
-          <a className="liveblog-meta-time" href={entry.share_link} target="_blank">
+          <a className="liveblog-meta-time" href={entry.share_link} target="_blank" rel="noopener noreferrer">
             <span>{timeAgo(entry.entry_time)}</span>
             <span>{formattedTime(entry.entry_time, config.utc_offset, config.date_format)}</span>
           </a>
@@ -99,24 +99,40 @@ class EntryContainer extends Component {
             />
             : null
           }
-          {
-            (entry.authors && entry.authors.length > 0) &&
-            <header className="liveblog-meta-authors">
-              {
-                entry.authors.map(author => (
-                  <div className="liveblog-meta-author" key={author.id}>
-                    { author.avatar &&
-                      <div
-                        className="liveblog-meta-author-avatar"
-                        dangerouslySetInnerHTML={{ __html: author.avatar }} />
-                    }
-                    <span className="liveblog-meta-author-name"
-                      dangerouslySetInnerHTML={{ __html: author.name }} />
-                  </div>
-                ))
+          <header className="liveblog-header">
+            { (entry.headline || entry.subtitle) &&
+              <div className="liveblog-entry-heading">
+              { entry.headline &&
+                <h2 className="liveblog-entry-headline">
+                  {entry.headline}
+                </h2>
               }
-            </header>
-          }
+              { entry.subtitle &&
+                <h3 className="liveblog-entry-subtitle">
+                  {entry.subtitle}
+                </h3>
+              }
+              </div>
+            }
+            {
+              (!config.hide_author_bylines && entry.authors && entry.authors.length > 0) &&
+              <div className="liveblog-meta-authors">
+                {
+                  entry.authors.map(author => (
+                    <div className="liveblog-meta-author" key={author.id}>
+                      { author.avatar &&
+                        <div
+                          className="liveblog-meta-author-avatar"
+                          dangerouslySetInnerHTML={{ __html: author.avatar }} />
+                      }
+                      <span className="liveblog-meta-author-name"
+                        dangerouslySetInnerHTML={{ __html: author.name }} />
+                    </div>
+                  ))
+                }
+              </div>
+            }
+          </header>        
           {
             this.isEditing()
               ? (
