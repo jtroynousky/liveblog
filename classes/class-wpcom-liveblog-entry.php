@@ -187,6 +187,15 @@ class WPCOM_Liveblog_Entry {
 			return $comment;
 		}
 
+		// Process key event checkbox
+		if ( class_exists('\WPCOM_Liveblog_Entry_Key_Events') && isset( $args['key_event'] ) ) {
+			if($args['key_event']){
+				add_comment_meta( $comment->comment_ID, \WPCOM_Liveblog_Entry_Key_Events::META_KEY, \WPCOM_Liveblog_Entry_Key_Events::META_VALUE );
+			} else {
+				delete_comment_meta( $comment->comment_ID, \WPCOM_Liveblog_Entry_Key_Events::META_KEY, \WPCOM_Liveblog_Entry_Key_Events::META_VALUE );
+			}
+		}
+		
 		// Add the headline as comment meta.
 		if ( isset( $args['headline'] ) ) {
 			update_comment_meta( $comment->comment_ID, self::HEADLINE_META_KEY, sanitize_text_field( $args['headline'] ) );
@@ -233,6 +242,15 @@ class WPCOM_Liveblog_Entry {
 		}
 
 		$args = apply_filters( 'liveblog_before_update_entry', $args );
+
+		// Process key event checkbox
+		if ( class_exists('\WPCOM_Liveblog_Entry_Key_Events') && isset( $args['key_event'] ) ) {
+			if($args['key_event']){
+				add_comment_meta( $args['entry_id'], \WPCOM_Liveblog_Entry_Key_Events::META_KEY, \WPCOM_Liveblog_Entry_Key_Events::META_VALUE );
+			} else {
+				delete_comment_meta( $args['entry_id'], \WPCOM_Liveblog_Entry_Key_Events::META_KEY, \WPCOM_Liveblog_Entry_Key_Events::META_VALUE );
+			}
+		}
 
 		$comment = self::insert_comment( $args );
 		if ( is_wp_error( $comment ) ) {

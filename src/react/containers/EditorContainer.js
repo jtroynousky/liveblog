@@ -26,6 +26,7 @@ import PostSubtitle from '../components/PostSubtitle';
 import Editor, { decorators, convertFromHTML, convertToHTML } from '../Editor/index';
 
 import { getImageSize } from '../Editor/utils';
+import KeyEventInput from '../components/KeyEventInput';
 
 class EditorContainer extends Component {
   constructor(props) {
@@ -48,7 +49,6 @@ class EditorContainer extends Component {
       initialEditorState = EditorState.createEmpty(decorators);
       initialAuthors = [props.config.current_user];
     }
-
     this.state = {
       editorState: initialEditorState,
       suggestions: [],
@@ -58,12 +58,17 @@ class EditorContainer extends Component {
       headline: props.entry ? props.entry.headline : '',
       subtitle: props.entry ? props.entry.subtitle : '',
       rawText: props.entry ? props.entry.content : '',
+      keyEvent: props.entry ? props.entry.key_event : false,
       lastUpdate: new Date().getTime(),
     };
 
     this.onChange = editorState => this.setState({
       editorState,
       rawText: html(convertToHTML(editorState.getCurrentContent())),
+    });
+
+    this.clearKeyEvent = () => this.setState({
+      keyEvent: false,
     });
 
     this.clearHeadline = () => this.setState({
@@ -110,6 +115,7 @@ class EditorContainer extends Component {
     const author = authorIds.length > 0 ? authorIds[0] : false;
     const contributors = authorIds.length > 1 ? authorIds.slice(1, authorIds.length) : false;
     const htmlregex = /<(img|picture|video|audio|canvas|svg|iframe|embed) ?.*>/;
+    const keyEvent = this.state.keyEvent;
     const headline = this.state.headline;
     const subtitle = this.state.subtitle;
 
@@ -129,6 +135,7 @@ class EditorContainer extends Component {
         content,
         author,
         contributors,
+        keyEvent,
         headline,
         subtitle,
       });
@@ -140,6 +147,7 @@ class EditorContainer extends Component {
       content,
       author,
       contributors,
+      keyEvent,
       headline,
       subtitle,
     });
@@ -162,6 +170,12 @@ class EditorContainer extends Component {
     });
   }
 
+  onkeyEventChange(value) {
+    this.setState({
+      keyEvent: value,
+    });
+  }
+  
   onHeadlineChange(value) {
     this.setState({
       headline: value,
@@ -289,6 +303,7 @@ class EditorContainer extends Component {
       mode,
       authors,
       readOnly,
+      keyEvent,
       headline,
       subtitle,
       lastUpdate
@@ -363,6 +378,24 @@ class EditorContainer extends Component {
             width="100%"
           />
         }
+        <KeyEventInput
+          onChange={this.onkeyEventChange.bind(this)}
+          checked={keyEvent}
+          lastUpdate={lastUpdate}
+          clearKeyEvent={this.clearKeyEvent.bind(this)}
+        />
+        <h2 className="liveblog-editor-subTitle">Authors:</h2>
+        <Async
+          multi={true}
+          value={authors}
+          valueKey="key"
+          labelKey="name"
+          onChange={this.onSelectAuthorChange.bind(this)}
+          optionComponent={AuthorSelectOption}
+          loadOptions={this.getUsers}
+          clearable={false}
+          cache={false}
+        />
 
         {!config.hide_author_input && this.authorsBlock(authors)}
 

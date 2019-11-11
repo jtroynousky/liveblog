@@ -48,6 +48,7 @@ export function createEntry(entry, config, nonce = false) {
       content: entry.content,
       author_id: entry.author,
       contributor_ids: entry.contributors,
+      key_event: entry.keyEvent,
       headline: entry.headline,
       subtitle: entry.subtitle,
 
@@ -74,6 +75,7 @@ export function updateEntry(entry, config, nonce = false) {
       content: entry.content,
       author_id: entry.author,
       contributor_ids: entry.contributors,
+      key_event: entry.keyEvent,
       headline: entry.headline,
       subtitle: entry.subtitle,
     },
