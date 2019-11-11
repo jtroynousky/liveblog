@@ -1073,6 +1073,8 @@ if ( ! class_exists( 'WPCOM_Liveblog' ) ) :
 						'class_term_prefix'            => __( 'term-', 'liveblog' ),
 						'class_alert'                  => __( 'type-alert', 'liveblog' ),
 						'class_key'                    => __( 'type-key', 'liveblog' ),
+						'disable_fuzzy_dates'          => false,
+						'display_event_date'           => false,
 
 						// Style
 						'hide_author_bylines'          => false,

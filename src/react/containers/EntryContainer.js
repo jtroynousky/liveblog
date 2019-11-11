@@ -75,9 +75,24 @@ class EntryContainer extends Component {
     );
   }
 
-  render() {
+  dateTimeBlock() {
     const { entry, config } = this.props;
     
+    return (
+      <React.Fragment>
+        {
+          (!config.disable_fuzzy_dates)
+          ? (<span>{timeAgo(entry.entry_time)}</span>)
+          : (<span>{formattedTime(entry.entry_time, config.utc_offset, config.time_format)}</span>)
+        }
+        <span>{formattedTime(entry.entry_time, config.utc_offset, config.date_format)}</span>
+      </React.Fragment>
+    );
+  }
+
+  render() {
+    const { entry } = this.props;
+
     return (
       <article
         id={`id_${entry.id}`}
@@ -86,8 +101,7 @@ class EntryContainer extends Component {
       >
         <aside className="liveblog-entry-aside">
           <a className="liveblog-meta-time" href={entry.share_link} target="_blank" rel="noopener noreferrer">
-            <span>{timeAgo(entry.entry_time)}</span>
-            <span>{formattedTime(entry.entry_time, config.utc_offset, config.date_format)}</span>
+            {this.dateTimeBlock()}
           </a>
         </aside>
         <div className="liveblog-entry-main">
