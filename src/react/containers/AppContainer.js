@@ -30,13 +30,14 @@ class AppContainer extends Component {
   render() {
     const { page, loading, entries, polling, mergePolling, config } = this.props;
     const canEdit = config.is_liveblog_editable === '1';
+    const topPaginaton = config.display_top_pagination;
 
     return (
       <div style={{ position: 'relative' }}>
         {(page === 1 && canEdit) && <Editor isEditing={false} />}
         <UpdateButton polling={polling} click={() => mergePolling()} />
-        <PaginationContainer />
-        <Entries loading={loading} entries={entries} />
+        {(topPaginaton) && <PaginationContainer />}
+        <Entries title={config.feed_title} loading={loading} entries={entries} />
         <PaginationContainer />
         {this.eventsContainer && <EventsContainer container={this.eventsContainer} title={this.eventsContainer.getAttribute('data-title')} />}
       </div>
