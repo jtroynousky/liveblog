@@ -52399,7 +52399,12 @@ var EntryContainer = function (_Component) {
     }
   }, {
     key: 'dateTimeBlock',
-    value: function dateTimeBlock(entry, config) {
+    value: function dateTimeBlock() {
+      var _props = this.props,
+          entry = _props.entry,
+          config = _props.config;
+
+
       return _react2.default.createElement(
         _react2.default.Fragment,
         null,
@@ -52424,9 +52429,7 @@ var EntryContainer = function (_Component) {
     value: function render() {
       var _this2 = this;
 
-      var _props = this.props,
-          entry = _props.entry,
-          config = _props.config;
+      var entry = this.props.entry;
 
 
       return _react2.default.createElement(
@@ -52444,7 +52447,7 @@ var EntryContainer = function (_Component) {
           _react2.default.createElement(
             'a',
             { className: 'liveblog-meta-time', href: entry.share_link, target: '_blank' },
-            this.dateTimeBlock(entry, config)
+            this.dateTimeBlock()
           )
         ),
         _react2.default.createElement(
@@ -53113,7 +53116,8 @@ var EventsContainer = function (_Component) {
           canEdit = _props.canEdit,
           utcOffset = _props.utcOffset,
           dateFormat = _props.dateFormat,
-          title = _props.title;
+          title = _props.title,
+          config = _props.config;
 
 
       return _react2.default.createElement(
@@ -53139,7 +53143,10 @@ var EventsContainer = function (_Component) {
               },
               canEdit: canEdit,
               utcOffset: utcOffset,
-              dateFormat: dateFormat
+              dateFormat: dateFormat,
+              timeFormat: config.time_format,
+              displayDate: config.display_event_date,
+              disableFuzzy: config.disable_fuzzy_dates
             });
           })
         ),
@@ -53163,6 +53170,7 @@ var EventsContainer = function (_Component) {
 }(_react.Component);
 
 EventsContainer.propTypes = {
+  config: _propTypes2.default.object,
   getEvents: _propTypes2.default.func,
   deleteEvent: _propTypes2.default.func,
   jumpToEvent: _propTypes2.default.func,
@@ -53179,7 +53187,8 @@ var mapStateToProps = function mapStateToProps(state) {
     dateFormat: state.config.date_format,
     utcOffset: state.config.utc_offset,
     events: state.events.entries,
-    canEdit: state.config.is_liveblog_editable === '1'
+    canEdit: state.config.is_liveblog_editable === '1',
+    config: state.config
   };
 };
 
@@ -53218,7 +53227,10 @@ var Event = function Event(_ref) {
       onDelete = _ref.onDelete,
       canEdit = _ref.canEdit,
       utcOffset = _ref.utcOffset,
-      dateFormat = _ref.dateFormat;
+      dateFormat = _ref.dateFormat,
+      timeFormat = _ref.timeFormat,
+      disableFuzzy = _ref.disableFuzzy,
+      displayDate = _ref.displayDate;
   return _react2.default.createElement(
     'li',
     { className: 'liveblog-event' },
@@ -53228,7 +53240,16 @@ var Event = function Event(_ref) {
       _react2.default.createElement(
         'div',
         { className: 'liveblog-event-meta' },
-        (0, _utils.timeAgo)(event.entry_time, utcOffset, dateFormat)
+        _react2.default.createElement(
+          'span',
+          null,
+          disableFuzzy ? (0, _utils.formattedTime)(event.entry_time, utcOffset, timeFormat) : (0, _utils.timeAgo)(event.entry_time, utcOffset, dateFormat)
+        ),
+        displayDate && _react2.default.createElement(
+          'span',
+          null,
+          (0, _utils.formattedTime)(event.entry_time, utcOffset, dateFormat)
+        )
       ),
       _react2.default.createElement(
         'div',
