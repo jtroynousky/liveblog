@@ -229,6 +229,25 @@ class EditorContainer extends Component {
     });
   }
 
+  authorsBlock(authors) {
+    return (
+      <React.Fragment>
+        <h2 className="liveblog-editor-subTitle">Authors:</h2>
+        <Async
+          multi={true}
+          value={authors}
+          valueKey="key"
+          labelKey="name"
+          onChange={this.onSelectAuthorChange.bind(this)}
+          optionComponent={AuthorSelectOption}
+          loadOptions={this.getUsers}
+          clearable={false}
+          cache={false}
+        />
+      </React.Fragment>
+    );
+  }
+
   render() {
     const {
       editorState,
@@ -298,18 +317,9 @@ class EditorContainer extends Component {
             width="100%"
           />
         }
-        <h2 className="liveblog-editor-subTitle">Authors:</h2>
-        <Async
-          multi={true}
-          value={authors}
-          valueKey="key"
-          labelKey="name"
-          onChange={this.onSelectAuthorChange.bind(this)}
-          optionComponent={AuthorSelectOption}
-          loadOptions={this.getUsers}
-          clearable={false}
-          cache={false}
-        />
+
+        {!config.hide_author_input && this.authorsBlock(authors)}
+
         <button className="liveblog-btn liveblog-publish-btn" onClick={this.publish.bind(this)}>
           {isEditing ? 'Publish Update' : 'Publish New Entry'}
         </button>
