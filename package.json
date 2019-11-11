@@ -1,8 +1,8 @@
 {
   "name": "liveblog",
   "description": "Liveblogging done right. Using WordPress",
-  "version": "1.9.5",
-  "author": "Automattic",
+  "version": "1.9.7",
+  "author": "hrkhal",
   "private": true,
   "devDependencies": {
     "autoprefixer": "^7.1.6",

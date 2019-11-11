@@ -91,7 +91,7 @@ class EntryContainer extends Component {
   }
 
   render() {
-    const { entry } = this.props;
+    const { entry, config } = this.props;
 
     return (
       <article

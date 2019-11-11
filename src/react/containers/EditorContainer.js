@@ -384,19 +384,7 @@ class EditorContainer extends Component {
           lastUpdate={lastUpdate}
           clearKeyEvent={this.clearKeyEvent.bind(this)}
         />
-        <h2 className="liveblog-editor-subTitle">Authors:</h2>
-        <Async
-          multi={true}
-          value={authors}
-          valueKey="key"
-          labelKey="name"
-          onChange={this.onSelectAuthorChange.bind(this)}
-          optionComponent={AuthorSelectOption}
-          loadOptions={this.getUsers}
-          clearable={false}
-          cache={false}
-        />
-
+        
         {!config.hide_author_input && this.authorsBlock(authors)}
 
         <button className="liveblog-btn liveblog-publish-btn" onClick={this.publish.bind(this)}>
