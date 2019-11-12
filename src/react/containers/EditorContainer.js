@@ -75,9 +75,9 @@ class EditorContainer extends Component {
       headline: '',
     });
 
-    this.clearSubtitle = () => {console.log('here in clearSubtitle'); this.setState({
+    this.clearSubtitle = () => this.setState({
       subtitle: '',
-    })};
+    });
 
     this.getUsers = debounce(this.getUsers.bind(this), props.config.author_list_debounce_time);
   }

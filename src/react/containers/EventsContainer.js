@@ -53,7 +53,7 @@ class EventsContainer extends Component {
 
     return (
       <div>
-        { (title !== '') ? <h2 className="widget-title">{title}</h2> : null }
+        { (Object.keys(events).length > 0 && title !== '') ? <h2 className="widget-title">{title}</h2> : null }
         <ul className="liveblog-events">
           {Object.keys(events).map((key, i) =>
             <Event
