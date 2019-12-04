@@ -63,7 +63,7 @@ export default contentState =>
     },
     entityToHTML: (entity, originalText) => {
       if (entity.type === 'LINK') {
-        return <a href={entity.data.url}>{originalText}</a>;
+        return originalText;
       }
       if (entity.type === 'TEXT') {
         return React.createElement(
