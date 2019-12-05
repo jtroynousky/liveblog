@@ -62,6 +62,7 @@ export default contentState =>
       return <span />;
     },
     entityToHTML: (entity, originalText) => {
+      //this is to circumnavigate a current chrome bug where text from omnibox is copied over as rich text
       if (entity.type === 'LINK') {
         return originalText;
       }
