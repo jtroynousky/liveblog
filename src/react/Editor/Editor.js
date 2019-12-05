@@ -351,6 +351,8 @@ class EditorWrapper extends Component {
             handleDrop={this.handleDrop.bind(this)}
             handleKeyCommand={this.handleKeyCommand.bind(this)}
             keyBindingFn={event => keyBindingFunc(event, editorState, onChange)}
+            //this is to prevent a bug in chrome where content in the omnibox is wrapped in rich text
+            stripPastedStyles={true}
             spellCheck={true}
             readOnly={readOnly}
           />
