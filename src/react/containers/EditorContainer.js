@@ -123,10 +123,15 @@ class EditorContainer extends Component {
     // So we must check if there is any text within the editor
     // If we fail to find text then we should check for a valid
     // list of html elements, mainly visual for example images.
-    if (!editorState.getCurrentContent().getPlainText().trim()) {
+    if (!editorState.getCurrentContent().getPlainText().trim() && !headline && !subtitle ) {
       if (htmlregex.exec(convertToHTML(editorState.getCurrentContent())) === null) {
         return;
       }
+    }
+
+    // Prevent publishing of a keyEvent when it doesn't have a headline or subtitle.
+    if(keyEvent && (!headline && !subtitle)){
+      return;
     }
 
     if (isEditing) {
