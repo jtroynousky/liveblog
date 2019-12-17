@@ -77,10 +77,15 @@ class Media extends Component {
     // Make sure we are filtering by search if there is an input.
     // Limit search queries to just the last month.
     if (searchInput) {
-      const d = new Date();
-      d.setMonth(d.getMonth() - 1);
+      const date = new Date();
+      let newMonth = date.getMonth() - 3;
+      if (newMonth < 1) {
+        newMonth += 12;
+        date.setYear(date.getFullYear() - 1);
+      }
+      date.setMonth(newMonth);
       mergedParams.search = searchInput;
-      mergedParams.after = d.toISOString();
+      mergedParams.after = date.toISOString();
     }
 
     this.setState({ loading: true });
