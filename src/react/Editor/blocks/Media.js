@@ -75,7 +75,7 @@ class Media extends Component {
     };
 
     // Make sure we are filtering by search if there is an input.
-    // Limit search queries to just the last month.
+    // Limit search queries to just the last 3 months.
     if (searchInput) {
       const date = new Date();
       let newMonth = date.getMonth() - 3;
