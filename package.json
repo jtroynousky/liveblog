@@ -1,7 +1,7 @@
 {
   "name": "liveblog",
   "description": "Liveblogging done right. Using WordPress",
-  "version": "1.9.12",
+  "version": "1.9.14",
   "author": "hrkhal",
   "private": true,
   "devDependencies": {
