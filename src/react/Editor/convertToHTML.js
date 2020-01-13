@@ -36,6 +36,7 @@ export default contentState =>
         return {
           start: '<li>',
           end: '</li>',
+          nest: '<ul>',
           nestStart: '<ul>',
           nestEnd: '</ul>',
         };
@@ -44,8 +45,15 @@ export default contentState =>
         return {
           start: '<li>',
           end: '</li>',
+          nest: '<ol>',
           nestStart: '<ol>',
           nestEnd: '</ol>',
+        };
+      }
+      if (block.type === 'blockquote') {
+        return {
+          start: '<blockquote>',
+          end: '</blockquote>',
         };
       }
       if (block.type === 'unstyled') {

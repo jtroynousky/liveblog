@@ -4,7 +4,7 @@
  * Plugin Name: Liveblog
  * Plugin URI: http://wordpress.org/extend/plugins/liveblog/
  * Description: Empowers website owners to provide rich and engaging live event coverage to a large, distributed audience.
- * Version:     1.9.5
+ * Version:     1.9.14
  * Author:      WordPress.com VIP, Big Bite Creative and contributors
  * Author URI: https://github.com/Automattic/liveblog/graphs/contributors
  * Text Domain: liveblog
@@ -26,7 +26,7 @@ if ( ! class_exists( 'WPCOM_Liveblog' ) ) :
 	final class WPCOM_Liveblog {
 
 		/** Constants *************************************************************/
-		const VERSION                 = '1.9.5';
+		const VERSION                 = '1.9.14';
 		const REWRITES_VERSION        = 1;
 		const MIN_WP_VERSION          = '4.4';
 		const MIN_WP_REST_API_VERSION = '4.4';
@@ -1074,6 +1074,14 @@ if ( ! class_exists( 'WPCOM_Liveblog' ) ) :
 						'class_term_prefix'            => __( 'term-', 'liveblog' ),
 						'class_alert'                  => __( 'type-alert', 'liveblog' ),
 						'class_key'                    => __( 'type-key', 'liveblog' ),
+						'disable_fuzzy_dates'          => false,
+						'display_event_date'           => false,
+
+						// Style
+						'hide_author_bylines'          => false,
+						'hide_author_input'            => false,
+						'feed_title'                  => __( '', 'liveblog' ),
+						'display_top_pagination'      => true,
 
 						/**
 						 * Filters the Author list debounce time, defaults to 500ms.
