@@ -1321,7 +1321,8 @@ if ( ! class_exists( 'WPCOM_Liveblog' ) ) :
 
 			// Add a 
 			$extra_field_hide_date = array(
-				'text'  => __( 'Hide the date for all published entries in this liveblog', 'liveblog' ),
+				'text'    => __( 'Hide the date for all published entries in this liveblog', 'liveblog' ),
+				'checked' => (bool) get_post_meta( $post->ID, 'liveblog_hide_date', true ) ? 'checked' : ''
 			);
 
 			$extra_fields[] = self::get_template_part( 'hide-date.php', $extra_field_hide_date );

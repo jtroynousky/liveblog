@@ -14,11 +14,12 @@
 			'for' => array(),
 		),
 		'input'  => array(
-			'id'    => array(),
-			'class' => array(),
-			'type'  => array(),
-			'value' => array(),
-			'name'  => array(),
+			'id'      => array(),
+			'class'   => array(),
+			'type'    => array(),
+			'value'   => array(),
+			'name'    => array(),
+			'checked' => array(),
 		),
 		'button' => array(
 			'id'    => array(),
