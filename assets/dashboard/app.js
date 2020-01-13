@@ -14,6 +14,7 @@ jQuery( function( $ ) {
 		if (liveblog_admin_settings.use_rest_api == 1) {
 			var url = liveblog_admin_settings.endpoint_url;
 			data['state']                           = encodeURIComponent( $( this ).val() );
+			data['hide_date']                       = encodeURIComponent( $( '#liveblog-hide-date' ).is(':checked') )
 			data['template_name']                   = encodeURIComponent( $( '#liveblog-key-template-name' ).val() );
 			data['template_format']                 = encodeURIComponent( $( '#liveblog-key-template-format' ).val() );
 			data['limit']                           = encodeURIComponent( $( '#liveblog-key-limit' ).val() );

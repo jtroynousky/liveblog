@@ -1,5 +1,6 @@
 <?php
 	$meta_box_allowed_tags = array(
+		'p'      => array(),
 		'select' => array(
 			'id'    => array(),
 			'class' => array(),
