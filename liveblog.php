@@ -1080,8 +1080,9 @@ if ( ! class_exists( 'WPCOM_Liveblog' ) ) :
 						// Style
 						'hide_author_bylines'          => false,
 						'hide_author_input'            => false,
-						'feed_title'                  => __( '', 'liveblog' ),
-						'display_top_pagination'      => true,
+						'feed_title'                   => __( '', 'liveblog' ),
+						'custom_feed_title'            => get_post_meta( get_the_ID(), 'liveblog_feed_title', true ),
+						'display_top_pagination'       => true,
 
 						/**
 						 * Filters the Author list debounce time, defaults to 500ms.
@@ -1319,13 +1320,21 @@ if ( ! class_exists( 'WPCOM_Liveblog' ) ) :
 			// Extra fields to add to the meta box.
 			$extra_fields = array();
 
-			// Add a 
+			// Add an option to hide the date
 			$extra_field_hide_date = array(
 				'text'    => __( 'Hide the date for all published entries in this liveblog', 'liveblog' ),
 				'checked' => (bool) get_post_meta( $post->ID, 'liveblog_hide_date', true ) ? 'checked' : ''
 			);
 
-			$extra_fields[] = self::get_template_part( 'hide-date.php', $extra_field_hide_date );
+			// Add an option to override the feed title.
+			$feed_title = get_post_meta( $post->ID, 'liveblog_feed_title', true );
+			$extra_field_feed_title = array(
+				'text'  => 'Override the default feed title',
+				'value' => ( ! empty( $feed_title ) ) ? $feed_title : ''
+			);
+
+			$extra_fields[] = self::get_template_part( 'field-hide-date.php', $extra_field_hide_date );
+			$extra_fields[] = self::get_template_part( 'field-feed-title.php', $extra_field_feed_title );
 
 			/**
 			 * Filter extra fields to add to the meta box.
@@ -1383,6 +1392,7 @@ if ( ! class_exists( 'WPCOM_Liveblog' ) ) :
 
 			self::set_liveblog_state( $post_id, $new_state );
 			self::set_date_display( $post_id, $new_state );
+			self::set_feed_title( $post_id, $new_state );
 
 			return self::get_meta_box( $post );
 
@@ -1461,6 +1471,28 @@ if ( ! class_exists( 'WPCOM_Liveblog' ) ) :
 					update_post_meta( $post_id, 'liveblog_hide_date', true );
 				} else {
 					delete_post_meta( $post_id, 'liveblog_hide_date' );
+				}
+			}
+		}
+
+		/**
+		 * Set the date display.
+		 *
+		 * @param $post_id
+		 * @param $new_state
+		 *
+		 * @return bool
+		 */
+		public static function set_feed_title( $post_id, $new_state ) {
+
+			if ( 'liveblog-feed-title-save' === $new_state ) {
+
+				$feed_title = ( ! empty( $_REQUEST['feed_title'] ) ) ? sanitize_text_field( urldecode( $_REQUEST['feed_title'] ) ) : '';
+				
+				if ( ! empty( $feed_title ) ) {
+					update_post_meta( $post_id, 'liveblog_feed_title', $feed_title );
+				} else {
+					delete_post_meta( $post_id, 'liveblog_feed_title' );
 				}
 			}
 		}

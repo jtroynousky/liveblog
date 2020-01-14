@@ -31,13 +31,14 @@ class AppContainer extends Component {
     const { page, loading, entries, polling, mergePolling, config } = this.props;
     const canEdit = config.is_liveblog_editable === '1';
     const topPaginaton = config.display_top_pagination;
+    const feedTitle = config.custom_feed_title ? config.custom_feed_title : config.feed_title;
 
     return (
       <div style={{ position: 'relative' }}>
         {(page === 1 && canEdit) && <Editor isEditing={false} />}
         <UpdateButton polling={polling} click={() => mergePolling()} />
         {(topPaginaton) && <PaginationContainer />}
-        <Entries title={config.feed_title} loading={loading} entries={entries} />
+        <Entries title={feedTitle} loading={loading} entries={entries} />
         <PaginationContainer />
         {this.eventsContainer && <EventsContainer container={this.eventsContainer} title={this.eventsContainer.getAttribute('data-title')} />}
       </div>
