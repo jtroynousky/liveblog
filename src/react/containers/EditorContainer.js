@@ -27,6 +27,7 @@ import Editor, { decorators, convertFromHTML, convertToHTML } from '../Editor/in
 
 import { getImageSize } from '../Editor/utils';
 import KeyEventInput from '../components/KeyEventInput';
+import KeyEventURLInput from '../components/KeyEventURLInput';
 
 class EditorContainer extends Component {
   constructor(props) {
@@ -59,6 +60,7 @@ class EditorContainer extends Component {
       subtitle: props.entry ? props.entry.subtitle : '',
       rawText: props.entry ? props.entry.content : '',
       keyEvent: props.entry ? props.entry.key_event : false,
+      keyEventURL: props.entry ? props.entry.key_event_url : '',
       lastUpdate: new Date().getTime(),
     };
 
@@ -69,6 +71,10 @@ class EditorContainer extends Component {
 
     this.clearKeyEvent = () => this.setState({
       keyEvent: false,
+    });
+
+    this.clearKeyEventURL = () => this.setState({
+      keyEventURL: '',
     });
 
     this.clearHeadline = () => this.setState({
@@ -116,6 +122,7 @@ class EditorContainer extends Component {
     const contributors = authorIds.length > 1 ? authorIds.slice(1, authorIds.length) : false;
     const htmlregex = /<(img|picture|video|audio|canvas|svg|iframe|embed) ?.*>/;
     const keyEvent = this.state.keyEvent;
+    const keyEventURL = this.state.keyEventURL;
     const headline = this.state.headline;
     const subtitle = this.state.subtitle;
 
@@ -141,6 +148,7 @@ class EditorContainer extends Component {
         author,
         contributors,
         keyEvent,
+        keyEventURL,
         headline,
         subtitle,
       });
@@ -153,6 +161,7 @@ class EditorContainer extends Component {
       author,
       contributors,
       keyEvent,
+      keyEventURL,
       headline,
       subtitle,
     });
@@ -178,6 +187,12 @@ class EditorContainer extends Component {
   onkeyEventChange(value) {
     this.setState({
       keyEvent: value,
+    });
+  }
+
+  onkeyEventURLChange(value) {
+    this.setState({
+      keyEventURL: value,
     });
   }
   
@@ -309,6 +324,7 @@ class EditorContainer extends Component {
       authors,
       readOnly,
       keyEvent,
+      keyEventURL,
       headline,
       subtitle,
       lastUpdate
@@ -388,6 +404,13 @@ class EditorContainer extends Component {
           checked={keyEvent}
           lastUpdate={lastUpdate}
           clearKeyEvent={this.clearKeyEvent.bind(this)}
+        />
+
+        <KeyEventURLInput
+          onChange={this.onkeyEventURLChange.bind(this)}
+          keyEventURL={keyEventURL}
+          lastUpdate={lastUpdate}
+          clearKeyEventURL={this.clearKeyEventURL.bind(this)}
         />
         
         {!config.hide_author_input && this.authorsBlock(authors)}

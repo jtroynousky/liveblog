@@ -49,6 +49,7 @@ export function createEntry(entry, config, nonce = false) {
       author_id: entry.author,
       contributor_ids: entry.contributors,
       key_event: entry.keyEvent,
+      key_event_url: entry.keyEventURL,
       headline: entry.headline,
       subtitle: entry.subtitle,
 
