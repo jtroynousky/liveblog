@@ -2830,6 +2830,7 @@ function updateEntry(entry, config) {
       author_id: entry.author,
       contributor_ids: entry.contributors,
       key_event: entry.keyEvent,
+      key_event_url: entry.keyEventURL,
       headline: entry.headline,
       subtitle: entry.subtitle
     },
@@ -53187,7 +53188,8 @@ var EventsContainer = function (_Component) {
               dateFormat: dateFormat,
               timeFormat: config.time_format,
               displayDate: config.display_event_date,
-              disableFuzzy: config.disable_fuzzy_dates
+              disableFuzzy: config.disable_fuzzy_dates,
+              hideDate: config.hide_date
             });
           })
         ),
@@ -53271,14 +53273,15 @@ var Event = function Event(_ref) {
       dateFormat = _ref.dateFormat,
       timeFormat = _ref.timeFormat,
       disableFuzzy = _ref.disableFuzzy,
-      displayDate = _ref.displayDate;
+      displayDate = _ref.displayDate,
+      hideDate = _ref.hideDate;
   return _react2.default.createElement(
     'li',
     { className: 'liveblog-event' },
     _react2.default.createElement(
       'div',
       { className: 'liveblog-event-body' },
-      _react2.default.createElement(
+      !hideDate && _react2.default.createElement(
         'div',
         { className: 'liveblog-event-meta' },
         _react2.default.createElement(

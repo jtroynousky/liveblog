@@ -67,6 +67,7 @@ class EventsContainer extends Component {
               timeFormat={config.time_format}
               displayDate={config.display_event_date}
               disableFuzzy={config.disable_fuzzy_dates}
+              hideDate={config.hide_date}
             />,
           )}
         </ul>
