@@ -119,7 +119,7 @@ class WPCOM_Liveblog_Entry_Key_Events {
 		if ( $json['key_event'] ) {
 			$key_event_url = get_comment_meta( $json['id'], self::META_KEY_URL, true );
 			if ( ! empty( $key_event_url ) ) {
-				$json['key_event_url'] = $key_event_url;
+				$json['key_event_url'] = esc_url( $key_event_url );
 			}
 		}
 
