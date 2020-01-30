@@ -1044,6 +1044,7 @@ if ( ! class_exists( 'WPCOM_Liveblog' ) ) :
 						'date_format'                  => get_option( 'date_format' ),
 						'time_format'                  => get_option( 'time_format' ),
 						'entries_per_page'             => WPCOM_Liveblog_Lazyloader::get_number_of_entries(),
+						'hide_date'                    => (bool) get_post_meta( get_the_ID(), 'liveblog_hide_date', true ),
 
 						'refresh_interval'             => self::get_refresh_interval(),
 						'focus_refresh_interval'       => self::FOCUS_REFRESH_INTERVAL,
@@ -1079,8 +1080,9 @@ if ( ! class_exists( 'WPCOM_Liveblog' ) ) :
 						// Style
 						'hide_author_bylines'          => false,
 						'hide_author_input'            => false,
-						'feed_title'                  => __( '', 'liveblog' ),
-						'display_top_pagination'      => true,
+						'feed_title'                   => __( '', 'liveblog' ),
+						'custom_feed_title'            => get_post_meta( get_the_ID(), 'liveblog_feed_title', true ),
+						'display_top_pagination'       => true,
 
 						/**
 						 * Filters the Author list debounce time, defaults to 500ms.
@@ -1314,7 +1316,32 @@ if ( ! class_exists( 'WPCOM_Liveblog' ) ) :
 				$buttons['archive']['disabled'] = true;
 			}
 			$update_text  = __( 'Settings have been successfully updated.', 'liveblog' );
+
+			// Extra fields to add to the meta box.
 			$extra_fields = array();
+
+			// Add an option to hide the date
+			$extra_field_hide_date = array(
+				'text'    => __( 'Hide the date for all published entries in this liveblog', 'liveblog' ),
+				'checked' => (bool) get_post_meta( $post->ID, 'liveblog_hide_date', true ) ? 'checked' : ''
+			);
+
+			// Add an option to override the feed title.
+			$feed_title = get_post_meta( $post->ID, 'liveblog_feed_title', true );
+			$extra_field_feed_title = array(
+				'text'  => 'Override the default feed title',
+				'value' => ( ! empty( $feed_title ) ) ? $feed_title : ''
+			);
+
+			$extra_fields[] = self::get_template_part( 'field-hide-date.php', $extra_field_hide_date );
+			$extra_fields[] = self::get_template_part( 'field-feed-title.php', $extra_field_feed_title );
+
+			/**
+			 * Filter extra fields to add to the meta box.
+			 *
+			 * @param array $extra_fields Array of HTML strings to add to the meta box.
+			 * @param int   $post_id      The liveblog post ID.
+			 */
 			$extra_fields = apply_filters( 'liveblog_admin_add_settings', $extra_fields, $post->ID );
 
 			return self::get_template_part( 'meta-box.php', compact( 'active_text', 'buttons', 'update_text', 'extra_fields' ) );
@@ -1364,6 +1391,8 @@ if ( ! class_exists( 'WPCOM_Liveblog' ) ) :
 			do_action( 'liveblog_admin_settings_update', $request_vars, $post_id );
 
 			self::set_liveblog_state( $post_id, $new_state );
+			self::set_date_display( $post_id, $new_state );
+			self::set_feed_title( $post_id, $new_state );
 
 			return self::get_meta_box( $post );
 
@@ -1421,6 +1450,50 @@ if ( ! class_exists( 'WPCOM_Liveblog' ) ) :
 				do_action( 'liveblog_disable_post', $post_id );
 			} else {
 				return false;
+			}
+		}
+
+		/**
+		 * Set the date display.
+		 *
+		 * @param $post_id
+		 * @param $new_state
+		 *
+		 * @return bool
+		 */
+		public static function set_date_display( $post_id, $new_state ) {
+
+			if ( 'liveblog-hide-date-save' === $new_state ) {
+
+				$hide_date = ( ! empty( $_REQUEST['hide_date'] ) && $_REQUEST['hide_date'] === 'true' ) ? true : false;
+				
+				if ( $hide_date ) {
+					update_post_meta( $post_id, 'liveblog_hide_date', true );
+				} else {
+					delete_post_meta( $post_id, 'liveblog_hide_date' );
+				}
+			}
+		}
+
+		/**
+		 * Set the date display.
+		 *
+		 * @param $post_id
+		 * @param $new_state
+		 *
+		 * @return bool
+		 */
+		public static function set_feed_title( $post_id, $new_state ) {
+
+			if ( 'liveblog-feed-title-save' === $new_state ) {
+
+				$feed_title = ( ! empty( $_REQUEST['feed_title'] ) ) ? sanitize_text_field( urldecode( $_REQUEST['feed_title'] ) ) : '';
+				
+				if ( ! empty( $feed_title ) ) {
+					update_post_meta( $post_id, 'liveblog_feed_title', $feed_title );
+				} else {
+					delete_post_meta( $post_id, 'liveblog_feed_title' );
+				}
 			}
 		}
 

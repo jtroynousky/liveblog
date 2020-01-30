@@ -2800,6 +2800,7 @@ function createEntry(entry, config) {
       author_id: entry.author,
       contributor_ids: entry.contributors,
       key_event: entry.keyEvent,
+      key_event_url: entry.keyEventURL,
       headline: entry.headline,
       subtitle: entry.subtitle
 
@@ -2829,6 +2830,7 @@ function updateEntry(entry, config) {
       author_id: entry.author,
       contributor_ids: entry.contributors,
       key_event: entry.keyEvent,
+      key_event_url: entry.keyEventURL,
       headline: entry.headline,
       subtitle: entry.subtitle
     },
@@ -52161,6 +52163,7 @@ var AppContainer = function (_Component) {
 
       var canEdit = config.is_liveblog_editable === '1';
       var topPaginaton = config.display_top_pagination;
+      var feedTitle = config.custom_feed_title ? config.custom_feed_title : config.feed_title;
 
       return _react2.default.createElement(
         'div',
@@ -52170,7 +52173,7 @@ var AppContainer = function (_Component) {
             return mergePolling();
           } }),
         topPaginaton && _react2.default.createElement(_PaginationContainer2.default, null),
-        _react2.default.createElement(_Entries2.default, { title: config.feed_title, loading: loading, entries: entries }),
+        _react2.default.createElement(_Entries2.default, { title: feedTitle, loading: loading, entries: entries }),
         _react2.default.createElement(_PaginationContainer2.default, null),
         this.eventsContainer && _react2.default.createElement(_EventsContainer2.default, { container: this.eventsContainer, title: this.eventsContainer.getAttribute('data-title') })
       );
@@ -52462,7 +52465,7 @@ var EntryContainer = function (_Component) {
           },
           className: 'liveblog-entry ' + (entry.key_event ? 'is-key-event' : '') + ' ' + entry.css_classes
         },
-        _react2.default.createElement(
+        !config.hide_date ? _react2.default.createElement(
           'aside',
           { className: 'liveblog-entry-aside' },
           _react2.default.createElement(
@@ -52470,7 +52473,7 @@ var EntryContainer = function (_Component) {
             { className: 'liveblog-meta-time', href: entry.share_link, target: '_blank', rel: 'noopener noreferrer' },
             this.dateTimeBlock()
           )
-        ),
+        ) : null,
         _react2.default.createElement(
           'div',
           { className: 'liveblog-entry-main' },
@@ -53175,7 +53178,7 @@ var EventsContainer = function (_Component) {
               key: i,
               event: events[key],
               click: function click() {
-                return jumpToEvent(events[key].id);
+                return events[key].key_event_url ? window.open(events[key].key_event_url, "_blank") : jumpToEvent(events[key].id);
               },
               onDelete: function onDelete() {
                 return _this2.confirmDeletion(events[key]);
@@ -53185,7 +53188,8 @@ var EventsContainer = function (_Component) {
               dateFormat: dateFormat,
               timeFormat: config.time_format,
               displayDate: config.display_event_date,
-              disableFuzzy: config.disable_fuzzy_dates
+              disableFuzzy: config.disable_fuzzy_dates,
+              hideDate: config.hide_date
             });
           })
         ),
@@ -53269,14 +53273,15 @@ var Event = function Event(_ref) {
       dateFormat = _ref.dateFormat,
       timeFormat = _ref.timeFormat,
       disableFuzzy = _ref.disableFuzzy,
-      displayDate = _ref.displayDate;
+      displayDate = _ref.displayDate,
+      hideDate = _ref.hideDate;
   return _react2.default.createElement(
     'li',
     { className: 'liveblog-event' },
     _react2.default.createElement(
       'div',
       { className: 'liveblog-event-body' },
-      _react2.default.createElement(
+      !hideDate && _react2.default.createElement(
         'div',
         { className: 'liveblog-event-meta' },
         _react2.default.createElement(

@@ -1,5 +1,6 @@
 <?php
 	$meta_box_allowed_tags = array(
+		'p'      => array(),
 		'select' => array(
 			'id'    => array(),
 			'class' => array(),
@@ -13,11 +14,12 @@
 			'for' => array(),
 		),
 		'input'  => array(
-			'id'    => array(),
-			'class' => array(),
-			'type'  => array(),
-			'value' => array(),
-			'name'  => array(),
+			'id'      => array(),
+			'class'   => array(),
+			'type'    => array(),
+			'value'   => array(),
+			'name'    => array(),
+			'checked' => array(),
 		),
 		'button' => array(
 			'id'    => array(),
