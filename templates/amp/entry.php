@@ -13,12 +13,14 @@
 <div class="liveblog-entry" id="post<?php echo esc_attr( $update_time ); ?>"
 	data-sort-time="<?php echo esc_attr( $entry_time ); ?>">
 
+	<?php if ( empty( get_post_meta( get_the_ID(), 'liveblog_hide_date', true ) ) ) : ?>
 	<aside class="liveblog-entry-aside">
 		<a class="liveblog-meta-time" href="#" target="_blank">
 			<span><?php echo esc_html( $this->get( 'time_ago' ) ); ?></span>
 			<span><?php echo esc_html( $this->get( 'date' ) ); ?> </span>
 		</a>
 	</aside>
+	<?php endif; ?>
 
 	<div class="liveblog-entry-main">
 		<header class="liveblog-header">

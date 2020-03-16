@@ -77,13 +77,13 @@ class EntryContainer extends Component {
 
   dateTimeBlock() {
     const { entry, config } = this.props;
-    
+
     return (
       <React.Fragment>
         {
           (!config.disable_fuzzy_dates)
-          ? (<span>{timeAgo(entry.entry_time)}</span>)
-          : (<span>{formattedTime(entry.entry_time, config.utc_offset, config.time_format)}</span>)
+            ? (<span>{timeAgo(entry.entry_time)}</span>)
+            : (<span>{formattedTime(entry.entry_time, config.utc_offset, config.time_format)}</span>)
         }
         <span>{formattedTime(entry.entry_time, config.utc_offset, config.date_format)}</span>
       </React.Fragment>
@@ -99,11 +99,14 @@ class EntryContainer extends Component {
         ref={node => this.node = node}
         className={`liveblog-entry ${entry.key_event ? 'is-key-event' : ''} ${entry.css_classes}`}
       >
-        <aside className="liveblog-entry-aside">
-          <a className="liveblog-meta-time" href={entry.share_link} target="_blank" rel="noopener noreferrer">
-            {this.dateTimeBlock()}
-          </a>
-        </aside>
+        {!config.hide_date ?
+          <aside className="liveblog-entry-aside">
+            <a className="liveblog-meta-time" href={entry.share_link} target="_blank" rel="noopener noreferrer">
+              {this.dateTimeBlock()}
+            </a>
+          </aside>
+          : null
+        }
         <div className="liveblog-entry-main">
           {this.state.showPopup ?
             <DeleteConfirmation
@@ -116,16 +119,16 @@ class EntryContainer extends Component {
           <header className="liveblog-header">
             { (entry.headline || entry.subtitle) &&
               <div className="liveblog-entry-heading">
-              { entry.headline &&
-                <h2 className="liveblog-entry-headline">
-                  {entry.headline}
-                </h2>
-              }
-              { entry.subtitle &&
-                <h3 className="liveblog-entry-subtitle">
-                  {entry.subtitle}
-                </h3>
-              }
+                { entry.headline &&
+                  <h2 className="liveblog-entry-headline">
+                    {entry.headline}
+                  </h2>
+                }
+                { entry.subtitle &&
+                  <h3 className="liveblog-entry-subtitle">
+                    {entry.subtitle}
+                  </h3>
+                }
               </div>
             }
             {
@@ -146,7 +149,7 @@ class EntryContainer extends Component {
                 }
               </div>
             }
-          </header>        
+          </header>
           {
             this.isEditing()
               ? (

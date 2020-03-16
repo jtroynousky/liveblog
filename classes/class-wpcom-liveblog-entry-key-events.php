@@ -15,6 +15,7 @@ class WPCOM_Liveblog_Entry_Key_Events {
 	 */
 	const META_KEY          = 'liveblog_key_entry';
 	const META_VALUE        = 'true';
+	const META_KEY_URL      = 'liveblog_key_entry_url';
 	const META_KEY_TEMPLATE = '_liveblog_key_entry_template';
 	const META_KEY_FORMAT   = '_liveblog_key_entry_format';
 	const META_KEY_LIMIT    = '_liveblog_key_entry_limit';
@@ -113,6 +114,14 @@ class WPCOM_Liveblog_Entry_Key_Events {
 	public static function add_key_event_json( $json, $entry ) {
 
 		$json['key_event'] = self::is_key_event($json['id']);
+
+		// Add key event URL if it exists
+		if ( $json['key_event'] ) {
+			$key_event_url = get_comment_meta( $json['id'], self::META_KEY_URL, true );
+			if ( ! empty( $key_event_url ) ) {
+				$json['key_event_url'] = esc_url( $key_event_url );
+			}
+		}
 
 		return $json;
 	}

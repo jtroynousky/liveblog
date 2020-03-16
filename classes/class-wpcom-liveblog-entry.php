@@ -219,6 +219,13 @@ class WPCOM_Liveblog_Entry {
 			} else {
 				delete_comment_meta( $comment->comment_ID, \WPCOM_Liveblog_Entry_Key_Events::META_KEY, \WPCOM_Liveblog_Entry_Key_Events::META_VALUE );
 			}
+
+			// Process key event URL when key event is true
+			if($args['key_event'] && ! empty($args['key_event_url'])){
+				add_comment_meta( $comment->comment_ID, \WPCOM_Liveblog_Entry_Key_Events::META_KEY_URL, esc_url( $args['key_event_url'] ) );
+			} else {
+				delete_comment_meta( $comment->comment_ID, \WPCOM_Liveblog_Entry_Key_Events::META_KEY_URL );
+			}
 		}
 		
 		// Add the headline as comment meta.
@@ -274,6 +281,13 @@ class WPCOM_Liveblog_Entry {
 				add_comment_meta( $args['entry_id'], \WPCOM_Liveblog_Entry_Key_Events::META_KEY, \WPCOM_Liveblog_Entry_Key_Events::META_VALUE );
 			} else {
 				delete_comment_meta( $args['entry_id'], \WPCOM_Liveblog_Entry_Key_Events::META_KEY, \WPCOM_Liveblog_Entry_Key_Events::META_VALUE );
+			}
+
+			// Process key event URL when key event is true
+			if($args['key_event'] && ! empty($args['key_event_url'])){
+				update_comment_meta( $args['entry_id'], \WPCOM_Liveblog_Entry_Key_Events::META_KEY_URL, esc_url( $args['key_event_url'] ) );
+			} else {
+				delete_comment_meta( $args['entry_id'], \WPCOM_Liveblog_Entry_Key_Events::META_KEY_URL );
 			}
 		}
 

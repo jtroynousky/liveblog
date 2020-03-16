@@ -59,7 +59,7 @@ class EventsContainer extends Component {
             <Event
               key={i}
               event={events[key]}
-              click={() => jumpToEvent(events[key].id)}
+              click={() => events[key].key_event_url ? window.open(events[key].key_event_url, "_blank") : jumpToEvent(events[key].id)}
               onDelete={() => this.confirmDeletion(events[key])}
               canEdit={canEdit}
               utcOffset={utcOffset}
@@ -67,6 +67,7 @@ class EventsContainer extends Component {
               timeFormat={config.time_format}
               displayDate={config.display_event_date}
               disableFuzzy={config.disable_fuzzy_dates}
+              hideDate={config.hide_date}
             />,
           )}
         </ul>
