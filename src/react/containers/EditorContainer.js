@@ -22,6 +22,7 @@ import AuthorSelectOption from '../components/AuthorSelectOption';
 import HTMLInput from '../components/HTMLInput';
 import PostHeadline from '../components/PostHeadline';
 import PostSubtitle from '../components/PostSubtitle';
+import DateOverride from '../components/DateOverride';
 
 import Editor, { decorators, convertFromHTML, convertToHTML } from '../Editor/index';
 
@@ -346,6 +347,9 @@ class EditorContainer extends Component {
           subtitle={subtitle}
           lastUpdate={lastUpdate}
           clearSubtitle={this.clearSubtitle.bind(this)}
+        />
+        <DateOverride
+
         />
         <div className="liveblog-editor-tabs">
           <button
