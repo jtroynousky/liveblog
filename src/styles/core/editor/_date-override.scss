@@ -1,5 +1,10 @@
 #post-content #wpcom-liveblog-container {
 
+  #date-override-prompt {
+    display: inline;
+    margin-right: 5px;
+  }
+
   .components-datetime__time-field-month-select {
     background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAAQCAYAAAAiYZ4HAAAAWklEQVQ4T2NkIBEwkqieYbhoaGBgYKgn0vMNME+DNIA04gMgNU3IoVTHwMDQiEMHSK4ZJIcerNg0wRVj0wASqwVZDbUJxG5BthVXxNVAFaEoxmUDXp8PwqQBAFFICpAl48cOAAAAAElFTkSuQmCC) no-repeat #ffffff;
     background-position: 92% 50%;

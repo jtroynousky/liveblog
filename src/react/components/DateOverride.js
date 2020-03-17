@@ -11,27 +11,44 @@ class DateOverride extends React.Component {
       }
     };*/
   }
-  /*updateInputValue(evt) {
+  updateInputValue(evt) {
     this.props.onChange(evt.target.value);
-  }*/
+  }
+
   render() {
     return (
-      <div className="components-datetime">
-        <TimePicker
-          //currentTime={ currentDate }
-          //onChange={ onChange }
-          //is12Hour={ is12Hour }
-        />
+      <div className="liveblog-date-override">
+        <div>
+          <label
+            id="date-override-prompt"
+            htmlFor="date-override">
+            Override the display date?
+          </label>
+          <input
+            type="checkbox"
+            name="date-override"
+            className="liveblog-input liveblog-input-date-override"
+            onChange={ evt => this.updateInputValue(evt) }
+            checked={ this.props.checked }
+          />
+          <div className="components-datetime { this.props.checked ? '' : 'hidden' }">
+            <TimePicker
+              //currentTime={ currentDate }
+              //onChange={ onChange }
+              //is12Hour={ is12Hour }
+            />
+          </div>
+        </div>
       </div>
     );
   }
 }
-/*
-PostHeadline.propTypes = {
+
+DateOverride.propTypes = {
   onChange: PropTypes.func,
-  headline: PropTypes.string,
+  checked: PropTypes.bool,
   lastUpdate: PropTypes.number,
-  clearHeadline: PropTypes.func,
-};*/
+  clearKeyEvent: PropTypes.func,
+};
 
 export default DateOverride;
