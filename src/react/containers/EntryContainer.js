@@ -93,8 +93,6 @@ class EntryContainer extends Component {
   render() {
     const { entry, config } = this.props;
 
-    console.log(entry);
-
     return (
       <article
         id={`id_${entry.id}`}

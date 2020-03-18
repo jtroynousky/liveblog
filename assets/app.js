@@ -52459,8 +52459,6 @@ var EntryContainer = function (_Component) {
           config = _props2.config;
 
 
-      console.log(entry);
-
       return _react2.default.createElement(
         'article',
         {
