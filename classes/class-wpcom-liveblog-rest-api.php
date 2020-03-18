@@ -380,15 +380,17 @@ class WPCOM_Liveblog_Rest_Api {
 		$json        = $request->get_json_params();
 
 		$args = array(
-			'post_id'         => self::get_json_param( 'post_id', $json ),
-			'content'         => self::get_json_param( 'content', $json ),
-			'entry_id'        => self::get_json_param( 'entry_id', $json ),
-			'author_id'       => self::get_json_param( 'author_id', $json ),
-			'contributor_ids' => self::get_json_param( 'contributor_ids', $json ),
-			'key_event'       => self::get_json_param( 'key_event', $json ),
-			'key_event_url'   => self::get_json_param( 'key_event_url', $json ),
-			'headline'        => self::get_json_param( 'headline', $json ),
-			'subtitle'        => self::get_json_param( 'subtitle', $json ),
+			'post_id'               => self::get_json_param( 'post_id', $json ),
+			'content'               => self::get_json_param( 'content', $json ),
+			'entry_id'              => self::get_json_param( 'entry_id', $json ),
+			'author_id'             => self::get_json_param( 'author_id', $json ),
+			'contributor_ids'       => self::get_json_param( 'contributor_ids', $json ),
+			'key_event'             => self::get_json_param( 'key_event', $json ),
+			'key_event_url'         => self::get_json_param( 'key_event_url', $json ),
+			'display_date_override' => self::get_json_param( 'display_date_override', $json ),
+			'hide_display_date'     => self::get_json_param( 'hide_display_date', $json ),
+			'headline'              => self::get_json_param( 'headline', $json ),
+			'subtitle'              => self::get_json_param( 'subtitle', $json ),
 		);
 
 		self::set_liveblog_vars( $args['post_id'] );

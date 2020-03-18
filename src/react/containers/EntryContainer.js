@@ -85,7 +85,7 @@ class EntryContainer extends Component {
             ? (<span>{timeAgo(entry.entry_time)}</span>)
             : (<span>{formattedTime(entry.entry_time, config.utc_offset, config.time_format)}</span>)
         }
-        <span>{formattedTime(entry.entry_time, config.utc_offset, config.date_format)}</span>
+        <span>{entry.display_date_override ? entry.display_date_override : formattedTime(entry.entry_time, config.utc_offset, config.date_format)}</span>
       </React.Fragment>
     );
   }
@@ -93,13 +93,15 @@ class EntryContainer extends Component {
   render() {
     const { entry, config } = this.props;
 
+    console.log(entry);
+
     return (
       <article
         id={`id_${entry.id}`}
         ref={node => this.node = node}
         className={`liveblog-entry ${entry.key_event ? 'is-key-event' : ''} ${entry.css_classes}`}
       >
-        {!config.hide_date ?
+        {!config.hide_date && !entry.hide_display_date ?
           <aside className="liveblog-entry-aside">
             <a className="liveblog-meta-time" href={entry.share_link} target="_blank" rel="noopener noreferrer">
               {this.dateTimeBlock()}

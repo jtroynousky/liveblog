@@ -2802,8 +2802,9 @@ function createEntry(entry, config) {
       key_event: entry.keyEvent,
       key_event_url: entry.keyEventURL,
       headline: entry.headline,
-      subtitle: entry.subtitle
-
+      subtitle: entry.subtitle,
+      display_date_override: entry.displayDateOverride,
+      hide_display_date: entry.hideDisplayDate
     },
     headers: {
       'Content-Type': 'application/json',
@@ -2832,7 +2833,9 @@ function updateEntry(entry, config) {
       key_event: entry.keyEvent,
       key_event_url: entry.keyEventURL,
       headline: entry.headline,
-      subtitle: entry.subtitle
+      subtitle: entry.subtitle,
+      display_date_override: entry.displayDateOverride,
+      hide_display_date: entry.hideDisplayDate
     },
     headers: {
       'Content-Type': 'application/json',
@@ -52442,7 +52445,7 @@ var EntryContainer = function (_Component) {
         _react2.default.createElement(
           'span',
           null,
-          (0, _utils.formattedTime)(entry.entry_time, config.utc_offset, config.date_format)
+          entry.display_date_override ? entry.display_date_override : (0, _utils.formattedTime)(entry.entry_time, config.utc_offset, config.date_format)
         )
       );
     }
@@ -52456,6 +52459,8 @@ var EntryContainer = function (_Component) {
           config = _props2.config;
 
 
+      console.log(entry);
+
       return _react2.default.createElement(
         'article',
         {
@@ -52465,7 +52470,7 @@ var EntryContainer = function (_Component) {
           },
           className: 'liveblog-entry ' + (entry.key_event ? 'is-key-event' : '') + ' ' + entry.css_classes
         },
-        !config.hide_date ? _react2.default.createElement(
+        !config.hide_date && !entry.hide_display_date ? _react2.default.createElement(
           'aside',
           { className: 'liveblog-entry-aside' },
           _react2.default.createElement(
