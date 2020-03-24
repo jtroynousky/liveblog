@@ -35,6 +35,16 @@ class WPCOM_Liveblog_Entry {
 	 */
 	const SUBTITLE_META_KEY = 'liveblog_subtitle';
 
+	/**
+	 * @var string Meta key for overriding the display date
+	 */
+	const DISPLAY_DATE_OVERRIDE_META_KEY = 'liveblog_display_date_override';
+
+	/**
+	 * @var string Meta key for hiding the display date
+	 */
+	const HIDE_DISPLAY_DATE_META_KEY = 'liveblog_hide_display_date';
+
 
 	private $comment;
 	private $type = 'new';
@@ -143,17 +153,19 @@ class WPCOM_Liveblog_Entry {
 		$share_link  = get_permalink( $this->get_post_id() ) . '#' . $entry_id;
 
 		$entry = array(
-			'id'          => $entry_id,
-			'type'        => $this->get_type(),
-			'render'      => self::render_content( $this->get_content(), $this->comment ),
-			'headline'    => self::get_comment_headline_for_json( $entry_id ),
-			'subtitle'    => self::get_comment_subtitle_for_json( $entry_id ),
-			'content'     => apply_filters( 'liveblog_before_edit_entry', $this->get_content() ),
-			'css_classes' => $css_classes,
-			'timestamp'   => $this->get_timestamp(),
-			'authors'     => self::get_authors( $entry_id ),
-			'entry_time'  => $this->get_comment_date_gmt( 'U', $entry_id ),
-			'share_link'  => $share_link,
+			'id'                    => $entry_id,
+			'type'                  => $this->get_type(),
+			'render'                => self::render_content( $this->get_content(), $this->comment ),
+			'headline'              => self::get_comment_headline_for_json( $entry_id ),
+			'subtitle'              => self::get_comment_subtitle_for_json( $entry_id ),
+			'content'               => apply_filters( 'liveblog_before_edit_entry', $this->get_content() ),
+			'css_classes'           => $css_classes,
+			'timestamp'             => $this->get_timestamp(),
+			'authors'               => self::get_authors( $entry_id ),
+			'entry_time'            => $this->get_comment_date_gmt( 'U', $entry_id ),
+			'share_link'            => $share_link,
+			'display_date_override' => self::get_display_date_override_for_json( $entry_id ),
+			'hide_display_date'     => self::get_hide_display_date_for_json( $entry_id ),
 		);
 		$entry = apply_filters( 'liveblog_entry_for_json', $entry, $this );
 		return (object) $entry;
@@ -227,6 +239,20 @@ class WPCOM_Liveblog_Entry {
 				delete_comment_meta( $comment->comment_ID, \WPCOM_Liveblog_Entry_Key_Events::META_KEY_URL );
 			}
 		}
+
+		// Save the display date override
+		if ( ! empty( $args['display_date_override'] ) ) {
+			update_comment_meta( $comment->comment_ID, self::DISPLAY_DATE_OVERRIDE_META_KEY, sanitize_text_field( $args['display_date_override'] ) );
+		} else {
+			delete_comment_meta( $comment->comment_ID, self::DISPLAY_DATE_OVERRIDE_META_KEY );
+		}
+
+		// Hide the display date
+		if ( ! empty( $args['hide_display_date'] ) ) {
+			update_comment_meta( $comment->comment_ID, self::HIDE_DISPLAY_DATE_META_KEY, true );
+		} else {
+			delete_comment_meta( $comment->comment_ID, self::HIDE_DISPLAY_DATE_META_KEY );
+		}
 		
 		// Add the headline as comment meta.
 		if ( isset( $args['headline'] ) ) {
@@ -290,6 +316,21 @@ class WPCOM_Liveblog_Entry {
 				delete_comment_meta( $args['entry_id'], \WPCOM_Liveblog_Entry_Key_Events::META_KEY_URL );
 			}
 		}
+
+		// Save the display date override
+		if ( ! empty( $args['display_date_override'] ) ) {
+			update_comment_meta( $args['entry_id'], self::DISPLAY_DATE_OVERRIDE_META_KEY, sanitize_text_field( $args['display_date_override'] ) );
+		} else {
+			delete_comment_meta( $args['entry_id'], self::DISPLAY_DATE_OVERRIDE_META_KEY );
+		}
+
+		// Hide the display date
+		if ( ! empty( $args['hide_display_date'] ) ) {
+			update_comment_meta( $args['entry_id'], self::HIDE_DISPLAY_DATE_META_KEY, true );
+		} else {
+			delete_comment_meta( $args['entry_id'], self::HIDE_DISPLAY_DATE_META_KEY );
+		}
+		
 
 		$comment = self::insert_comment( $args );
 		if ( is_wp_error( $comment ) ) {
@@ -539,6 +580,26 @@ class WPCOM_Liveblog_Entry {
 		$subtitle = get_comment_meta( $comment_id, self::SUBTITLE_META_KEY, true );
 	
 		return $subtitle ?: '';
+	}
+
+	/**
+	 * Return the display date override
+	 *
+	 * @param int $comment_id The comment id to retrive the metadata.
+	 */
+	private static function get_display_date_override_for_json( $comment_id ) {
+		$display_date_override = get_comment_meta( $comment_id, self::DISPLAY_DATE_OVERRIDE_META_KEY, true );
+	
+		return $display_date_override ?: '';
+	}
+
+	/**
+	 * Return the display date override
+	 *
+	 * @param int $comment_id The comment id to retrive the metadata.
+	 */
+	private static function get_hide_display_date_for_json( $comment_id ) {
+		return (bool) get_comment_meta( $comment_id, self::HIDE_DISPLAY_DATE_META_KEY, true );
 	}
 
 	public static function get_userdata_with_filter( $author_id ) {

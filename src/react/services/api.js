@@ -52,7 +52,8 @@ export function createEntry(entry, config, nonce = false) {
       key_event_url: entry.keyEventURL,
       headline: entry.headline,
       subtitle: entry.subtitle,
-
+      display_date_override: entry.displayDateOverride,
+      hide_display_date: entry.hideDisplayDate,
     },
     headers: {
       'Content-Type': 'application/json',
@@ -80,6 +81,8 @@ export function updateEntry(entry, config, nonce = false) {
       key_event_url: entry.keyEventURL,
       headline: entry.headline,
       subtitle: entry.subtitle,
+      display_date_override: entry.displayDateOverride,
+      hide_display_date: entry.hideDisplayDate,
     },
     headers: {
       'Content-Type': 'application/json',

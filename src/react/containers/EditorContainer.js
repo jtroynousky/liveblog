@@ -28,6 +28,8 @@ import Editor, { decorators, convertFromHTML, convertToHTML } from '../Editor/in
 import { getImageSize } from '../Editor/utils';
 import KeyEventInput from '../components/KeyEventInput';
 import KeyEventURLInput from '../components/KeyEventURLInput';
+import DisplayDateOverride from '../components/DisplayDateOverride';
+import HideDisplayDate from '../components/HideDisplayDate';
 
 class EditorContainer extends Component {
   constructor(props) {
@@ -61,6 +63,8 @@ class EditorContainer extends Component {
       rawText: props.entry ? props.entry.content : '',
       keyEvent: props.entry ? props.entry.key_event : false,
       keyEventURL: props.entry ? props.entry.key_event_url : '',
+      displayDateOverride: props.entry ? props.entry.display_date_override : '',
+      hideDisplayDate: props.entry ? props.entry.hide_display_date : false,
       lastUpdate: new Date().getTime(),
     };
 
@@ -75,6 +79,14 @@ class EditorContainer extends Component {
 
     this.clearKeyEventURL = () => this.setState({
       keyEventURL: '',
+    });
+
+    this.clearDisplayDateOverride = () => this.setState({
+      displayDateOverride: '',
+    });
+
+    this.clearHideDisplayDate = () => this.setState({
+      hideDisplayDate: false,
     });
 
     this.clearHeadline = () => this.setState({
@@ -123,6 +135,8 @@ class EditorContainer extends Component {
     const htmlregex = /<(img|picture|video|audio|canvas|svg|iframe|embed) ?.*>/;
     const keyEvent = this.state.keyEvent;
     const keyEventURL = this.state.keyEventURL;
+    const displayDateOverride = this.state.displayDateOverride;
+    const hideDisplayDate = this.state.hideDisplayDate;
     const headline = this.state.headline;
     const subtitle = this.state.subtitle;
 
@@ -149,6 +163,8 @@ class EditorContainer extends Component {
         contributors,
         keyEvent,
         keyEventURL,
+        displayDateOverride,
+        hideDisplayDate,
         headline,
         subtitle,
       });
@@ -162,6 +178,8 @@ class EditorContainer extends Component {
       contributors,
       keyEvent,
       keyEventURL,
+      displayDateOverride,
+      hideDisplayDate,
       headline,
       subtitle,
     });
@@ -193,6 +211,18 @@ class EditorContainer extends Component {
   onkeyEventURLChange(value) {
     this.setState({
       keyEventURL: value,
+    });
+  }
+
+  onDisplayDateOverrideChange(value) {
+    this.setState({
+      displayDateOverride: value,
+    });
+  }
+
+  onHideDisplayDateChange(value) {
+    this.setState({
+      hideDisplayDate: value,
     });
   }
   
@@ -325,6 +355,8 @@ class EditorContainer extends Component {
       readOnly,
       keyEvent,
       keyEventURL,
+      displayDateOverride,
+      hideDisplayDate,
       headline,
       subtitle,
       lastUpdate
@@ -411,6 +443,20 @@ class EditorContainer extends Component {
           keyEventURL={keyEventURL}
           lastUpdate={lastUpdate}
           clearKeyEventURL={this.clearKeyEventURL.bind(this)}
+        />
+
+        <DisplayDateOverride
+          onChange={this.onDisplayDateOverrideChange.bind(this)}
+          displayDateOverride={displayDateOverride}
+          lastUpdate={lastUpdate}
+          clearDisplayDateOverride={this.clearDisplayDateOverride.bind(this)}
+        />
+
+        <HideDisplayDate
+          onChange={this.onHideDisplayDateChange.bind(this)}
+          checked={hideDisplayDate}
+          lastUpdate={lastUpdate}
+          clearHideDisplayDate={this.clearHideDisplayDate.bind(this)}
         />
         
         {!config.hide_author_input && this.authorsBlock(authors)}
