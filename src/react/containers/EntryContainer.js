@@ -78,6 +78,17 @@ class EntryContainer extends Component {
   dateTimeBlock() {
     const { entry, config } = this.props;
 
+    // Display date override
+    if (entry.display_date_override) {
+      return (
+        <React.Fragment>
+          <span></span>
+          <span>{entry.display_date_override ? entry.display_date_override : formattedTime(entry.entry_time, config.utc_offset, config.date_format)}</span>
+        </React.Fragment>
+      );
+    }
+
+    // Default time display
     return (
       <React.Fragment>
         {
@@ -85,7 +96,7 @@ class EntryContainer extends Component {
             ? (<span>{timeAgo(entry.entry_time)}</span>)
             : (<span>{formattedTime(entry.entry_time, config.utc_offset, config.time_format)}</span>)
         }
-        <span>{entry.display_date_override ? entry.display_date_override : formattedTime(entry.entry_time, config.utc_offset, config.date_format)}</span>
+        <span>{formattedTime(entry.entry_time, config.utc_offset, config.date_format)}</span>
       </React.Fragment>
     );
   }
