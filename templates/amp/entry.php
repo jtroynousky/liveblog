@@ -28,7 +28,7 @@
 			<div class="liveblog-entry-heading">
 				<?php if ($headline) : ?>
 				<h2 class="liveblog-entry-headline">
-                  <?php echo esc_html( $headline) ?>
+                  <?php echo wp_kses_post( $headline) ?>
                 </h2>
 				<?php endif; ?>
 				<?php if ($subtitle) : ?>

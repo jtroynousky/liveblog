@@ -131,9 +131,9 @@ class EntryContainer extends Component {
             { (entry.headline || entry.subtitle) &&
               <div className="liveblog-entry-heading">
                 { entry.headline &&
-                  <h2 className="liveblog-entry-headline">
-                    {entry.headline}
-                  </h2>
+                  <h2
+                    className="liveblog-entry-headline"
+                    dangerouslySetInnerHTML={{ __html: entry.headline }} />
                 }
                 { entry.subtitle &&
                   <h3 className="liveblog-entry-subtitle">

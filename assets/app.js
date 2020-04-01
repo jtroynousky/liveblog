@@ -52506,11 +52506,9 @@ var EntryContainer = function (_Component) {
             (entry.headline || entry.subtitle) && _react2.default.createElement(
               'div',
               { className: 'liveblog-entry-heading' },
-              entry.headline && _react2.default.createElement(
-                'h2',
-                { className: 'liveblog-entry-headline' },
-                entry.headline
-              ),
+              entry.headline && _react2.default.createElement('h2', {
+                className: 'liveblog-entry-headline',
+                dangerouslySetInnerHTML: { __html: entry.headline } }),
               entry.subtitle && _react2.default.createElement(
                 'h3',
                 { className: 'liveblog-entry-subtitle' },
